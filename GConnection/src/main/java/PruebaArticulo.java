@@ -149,17 +149,28 @@ public class PruebaArticulo {
 		
 		categoriaStr = JOptionPane.showInputDialog(listCategorias() + "Introduce categoria");
 		
-		precio = new BigDecimal(precioStr);
-		categoria = Integer.parseInt(categoriaStr);
+		
 		
 		String query = ("INSERT INTO articulo (nombre, categoria, precio) VALUES (?, ?, ?)");
 		
-		PreparedStatement sentencia = connect().prepareStatement(query);
-		sentencia.setString(1, nombre);
-		sentencia.setInt(2, categoria);
-		sentencia.setBigDecimal(3, precio);
-		
-		sentencia.execute();	
+		if (nombre.isEmpty() || precioStr.isEmpty() || categoriaStr.isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
+		}else{
+			try {
+				
+				precio = new BigDecimal(precioStr);
+				categoria = Integer.parseInt(categoriaStr);
+				
+				PreparedStatement sentencia = connect().prepareStatement(query);
+				sentencia.setString(1, nombre);
+				sentencia.setInt(2, categoria);
+				sentencia.setBigDecimal(3, precio);
+				
+				sentencia.execute();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "Error al guardar el articulo", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
 	}
 	
 	
